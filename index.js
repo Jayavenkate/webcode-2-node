@@ -1,0 +1,65 @@
+import * as dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import { MongoClient } from "mongodb";
+import cors from "cors";
+const app = express();
+//http://localhost:8000
+const PORT = process.env.PORT;
+// const MONGO_URL = "mongodb://127.0.0.1";
+const MONGO_URL = process.env.MONGO_URL;
+
+const client = new MongoClient(MONGO_URL);
+await client.connect(); // call
+console.log("Mongo is connected !!!  ");
+
+app.use(cors());
+app.use(express.json());
+
+app.get("/", function (request, response) {
+  response.send("🙋‍♂️, 🌏 🎊✨🤩 webcode 2");
+});
+
+app.get("/screens", async function (request, response) {
+  try {
+    const screens = await client
+      .db("b42wd2")
+      .collection("screen")
+      .find({})
+      .toArray();
+    response.send(screens);
+  } catch (err) {
+    response.status(401).send({ message: err });
+  }
+});
+
+app.get("/showmovies", async function (request, response) {
+  try {
+    const showmovies = await client
+      .db("b42wd2")
+      .collection("shows")
+      .find({})
+      .toArray();
+    response.send(showmovies);
+  } catch (err) {
+    response.status(401).send({ message: err });
+  }
+});
+app.post("/createshow", async function (request, response) {
+  const data = request.body;
+  console.log(data);
+  const result = await client.db("b42wd2").collection("shows").insertMany(data);
+
+  response.send(result);
+});
+app.post("/createscreen", async function (request, response) {
+  const data = request.body;
+  console.log(data);
+  const result = await client
+    .db("b42wd2")
+    .collection("screen")
+    .insertMany(data);
+
+  response.send(result);
+});
+app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));

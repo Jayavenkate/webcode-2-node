@@ -79,9 +79,6 @@ router.post("/login/forgetpassword", async function (request, response) {
 function sendMail(email, randomNumber) {
   const sender = nodemailer.createTransport({
     service: "gmail",
-    host: "smtp.forwardemail.net",
-    port: 465,
-    secure: true,
     auth: {
       user: process.env.Email,
       pass: process.env.Password,

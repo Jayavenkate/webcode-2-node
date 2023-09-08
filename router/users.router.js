@@ -73,6 +73,7 @@ router.post("/login/forgetpassword", async function (request, response) {
     const randomNumber = Math.floor(100000 + Math.random() * 900000);
     const setOtp = updateOtp(email, randomNumber);
     const mail = sendMail(email, randomNumber);
+    console.log(mail);
   }
   response.status(200).send({ message: "OTP sent successfully" });
 });

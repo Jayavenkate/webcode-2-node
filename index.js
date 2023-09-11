@@ -5,7 +5,11 @@ import { MongoClient } from "mongodb";
 import cors from "cors";
 import usersRouter from "./router/users.router.js";
 
-
+const corsOptions ={
+  origin:'*', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200,
+}
 const app = express();
 //http://localhost:8000
 const PORT = process.env.PORT;
@@ -16,7 +20,7 @@ export const client = new MongoClient(MONGO_URL);
 await client.connect(); // call
 console.log("Mongo is connected !!!  ");
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/", usersRouter);
 app.get("/", function (request, response) {
